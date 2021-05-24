@@ -6,6 +6,7 @@ Developers are often tasked with creating interfaces that make it easy for non-d
 
 Design the following database schema containing three tables:
 
+```md
  ______________________________________________________
 |    _____                _                            |
 |   | ____| __ ___  _ __ | | ___  _   _  ___  ___      |
@@ -22,7 +23,7 @@ Design the following database schema containing three tables:
 |                              __| |                   |
 |                             |____/                   |
 |______________________________________________________|
-
+```
 
 What would you like to do?  
 
