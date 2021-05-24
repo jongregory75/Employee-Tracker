@@ -1,10 +1,6 @@
-# Unit 12 MySQL Homework: Employee Tracker
+#MySQL: Employee Tracker
 
-Developers are often tasked with creating interfaces that make it easy for non-developers to view and interact with information stored in databases. Often these interfaces are known as **C**ontent **M**anagement **S**ystems. In this homework assignment, your challenge is to architect and build a solution for managing a company's employees using node, inquirer, and MySQL.
-
-## Instructions
-
-Design the following database schema containing three tables:
+Developers are often tasked with creating interfaces that make it easy for non-developers to view and interact with information stored in databases. Often these interfaces are known as **C**ontent **M**anagement **S**ystems. In this application, my goal was to architect and build a solution for managing a company's employees using node, inquirer, and MySQL.
 
 ```md
  ______________________________________________________
@@ -24,49 +20,13 @@ Design the following database schema containing three tables:
 |                             |____/                   |
 |______________________________________________________|
 ```
+## Usage
+run 'node empTracker.js' from the terminal window
 
-What would you like to do?  
+You'll be greeted with prompts to then view, add, update, or delete various parts of the employee database.
 
--View All Employees
--View All Employees By Department
--View All Employees By Manager
-
--Add Employee
- --Enter Employee First Name
- --Enter Employee Last Name
-
--Add Department
-   ---Sales
-   ---Legal
-   ---Finance
--Add Role
-   ---
-
-
--Remove Employee
--Update Employee Role
--Update Employee Manager
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-![Database Schema](Assets/schema.png)
+## Database Schema
+![Database Schema](/Images/schema.png)
 
 * **department**:
 
