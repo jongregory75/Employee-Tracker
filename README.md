@@ -1,6 +1,7 @@
 #MySQL: Employee Tracker
 
 Developers are often tasked with creating interfaces that make it easy for non-developers to view and interact with information stored in databases. Often these interfaces are known as **C**ontent **M**anagement **S**ystems. In this application, my goal was to architect and build a solution for managing a company's employees using node, inquirer, and MySQL.
+<<<<<<< HEAD
 
 ---
 
@@ -50,6 +51,55 @@ You'll be greeted with prompts to then view, add, update, or delete various part
   - **role_id** - INT to hold reference to role employee has
   - **manager_id** - INT to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
 
+=======
+
+```md
+ ______________________________________________________
+|    _____                _                            |
+|   | ____| __ ___  _ __ | | ___  _   _  ___  ___      |
+|   | __| | '_ ` _ \| '_ \| |/ _ \| | | |/ _ \/ _ \    |
+|   | |___| | | | | | |_ || | ( ) | |_| |  __/| __/    |
+|   |_____|_| |_| |_| ,__/|_|\___/\___, |\___|\___|    |
+|                   | |            ___| |              |
+|                   |_|            |___/               |
+|    __  __                                            |
+|   |  \/  | __ _ _ __   __ _  __ _  ___  _ __         |
+|   | |\/| |/ _` | '_ \ / _` |/ _` |/ _	\| '__|        |
+|   | |  | | (_| | | | | ( | | (_| |  __/| |           |
+|   |_|  |_|\__,_|_| |_|\__,_|\__, |\___||_|           |
+|                              __| |                   |
+|                             |____/                   |
+|______________________________________________________|
+```
+## Usage
+run 'node empTracker.js' from the terminal window
+
+You'll be greeted with prompts to then view, add, update, or delete various parts of the employee database.
+
+## Database Schema
+![Database Schema](/Images/schema.png)
+
+* **department**:
+
+  * **id** - INT PRIMARY KEY
+  * **name** - VARCHAR(30) to hold department name
+
+* **role**:
+
+  * **id** - INT PRIMARY KEY
+  * **title** -  VARCHAR(30) to hold role title
+  * **salary** -  DECIMAL to hold role salary
+  * **department_id** -  INT to hold reference to department role belongs to
+
+* **employee**:
+
+  * **id** - INT PRIMARY KEY
+  * **first_name** - VARCHAR(30) to hold employee first name
+  * **last_name** - VARCHAR(30) to hold employee last name
+  * **role_id** - INT to hold reference to role employee has
+  * **manager_id** - INT to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
+  
+>>>>>>> 8016cd12cac3841b4c977eb64ba93ce6d1a1b76c
 Build a command-line application that at a minimum allows the user to:
 
 - Add departments, roles, employees
