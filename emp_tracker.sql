@@ -28,13 +28,13 @@ USE emp_trackerDB;
 --  INSERT INTO emp_trackerDB.department (dept_name) VALUES ("Sales"),("Finance"),("Engineering"),("Legal");
 --  INSERT INTO emp_trackerDB.emp_role (title, salary, dept_id) 
 --  VALUES 
---  ("Sales Lead", 100000, 1),
---  ("Salesperson", 80000, 1),songs
---  ("Lead Engineer", 150000, 3),
---  ("Software Engineer", 120000, 3),
---  ("Accountant", 125000, 2),
---  ("Legal Team Lead", 250000, 4),
---  ("Lawyer", 190000, 4);
+-- ("Sales Lead", 100000, 1),
+-- ("Salesperson", 80000, 1),
+-- ("Lead Engineer", 150000, 3),
+-- ("Software Engineer", 120000, 3),
+-- ("Accountant", 125000, 2),
+-- ("Legal Team Lead", 250000, 4),
+-- ("Lawyer", 190000, 4);
 
 
 --  INSERT INTO emp_trackerDB.employee (first_name, last_name, role_id, manager_id)
@@ -51,9 +51,21 @@ USE emp_trackerDB;
 -- SELECT  FROM employee;
 --   
 -- SELECT * FROM department;
+-- DELETE FROM employee, emp_role USING employee INNER JOIN emp_role
+-- WHERE employee.id = emp_role.id
+
+ 
+-- DELETE employee, emp_role FROM employee
+-- INNER JOIN emp_role ON employee.id = emp_role.id
+-- WHERE employee.id = 10;
+
+SELECT id as id, CONCAT(first_name, ' ', last_name) full_name, title, salary, dept_name FROM employee a
+JOIN emp_role b ON a.id = b.id
+JOIN department c ON b.dept_id = c.id -- WHERE first_name = ${firstName} AND last_name = ${lastName}
 
 -- SELECT * FROM emp_role;
-SELECT role_id, CONCAT(first_name, ' ', last_name) full_name, title, salary, dept_name  FROM employee a
-JOIN emp_role b ON a.role_id = b.id 
-JOIN department c ON b.dept_id = c.id WHERE c.dept_name = "Engineering" 
+-- SELECT role_id, CONCAT(first_name, ' ', last_name) full_name, title, salary, dept_name  FROM employee a
+-- JOIN emp_role b ON a.role_id = b.id 
+
+-- JOIN department c ON b.dept_id = c.id WHERE c.dept_name = "Engineering" 
 

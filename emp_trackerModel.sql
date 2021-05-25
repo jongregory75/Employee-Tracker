@@ -112,20 +112,16 @@ DROP TABLE IF EXISTS `emp_trackerDB`.`role_has_role1` ;
 
 SHOW WARNINGS;
 CREATE TABLE IF NOT EXISTS `emp_trackerDB`.`role_has_role1` (
-  `role_id` INT NOT NULL,
-  `role_id1` INT NOT NULL,
-  PRIMARY KEY (`role_id`, `role_id1`),
-  CONSTRAINT `fk_role_has_role1_role1`
-    FOREIGN KEY (`role_id`)
-    REFERENCES `emp_trackerDB`.`role` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_role_has_role1_role2`
-    FOREIGN KEY (`role_id1`)
-    REFERENCES `emp_trackerDB`.`role` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    `role_id` INT NOT NULL,
+    `role_id1` INT NOT NULL,
+    PRIMARY KEY (`role_id` , `role_id1`),
+    CONSTRAINT `fk_role_has_role1_role1` FOREIGN KEY (`role_id`)
+        REFERENCES `emp_trackerDB`.`role` (`id`)
+        ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT `fk_role_has_role1_role2` FOREIGN KEY (`role_id1`)
+        REFERENCES `emp_trackerDB`.`role` (`id`)
+        ON DELETE NO ACTION ON UPDATE NO ACTION
+)  ENGINE=INNODB;
 
 SHOW WARNINGS;
 CREATE INDEX `fk_role_has_role1_role2_idx` ON `emp_trackerDB`.`role_has_role1` (`role_id1` ASC) VISIBLE;
