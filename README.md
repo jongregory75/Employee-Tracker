@@ -24,7 +24,9 @@ You'll be greeted with prompts to then view, add, update, or delete various part
 Build a command-line application that at a minimum allows the user to:
 
 :heavy_check_mark: Add departments, roles, employees
+
 :heavy_check_mark: View departments, roles, employees
+
 :heavy_check_mark: Update employee roles
 
 Bonus points if you're able to:
