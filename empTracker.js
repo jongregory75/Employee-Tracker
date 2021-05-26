@@ -44,6 +44,7 @@ function init() {
   mainMenuQuestion();
 }
 
+//array for main application logic
 const mainMenuQuestion = () => {
   const mainMenuQuestionArr = [
     "View All Employees",
@@ -53,6 +54,7 @@ const mainMenuQuestion = () => {
     "Update employee role",
   ];
 
+  //generates question for main menu logic
   const mainMenuChoice = [
     {
       type: "list",
@@ -61,6 +63,7 @@ const mainMenuQuestion = () => {
       choices: mainMenuQuestionArr,
     },
   ];
+  //main menu inquirer
   inquirer
     .prompt(mainMenuChoice)
     .then((answers) => {
@@ -96,6 +99,7 @@ const mainMenuQuestion = () => {
     });
 };
 
+//Select/join statement to pull info for each employee
 const viewAllEmployees = () => {
   connection.query(
     `SELECT a.id, CONCAT(first_name, ' ', last_name) full_name, title, salary, dept_name FROM employee a
@@ -110,6 +114,7 @@ const viewAllEmployees = () => {
   );
 };
 
+//catagory list of departments
 const deptCatagoryArr = ["Sales", "Finance", "Engineering", "Legal"];
 const titleChoiceArr = [
   "Sales Lead",
@@ -121,6 +126,7 @@ const titleChoiceArr = [
   "Lawyer",
 ];
 
+//question array of add new employee questions
 const addEmpArr = [
   {
     type: "input",
@@ -151,6 +157,7 @@ const addEmpArr = [
   },
 ];
 
+//logic to run through and call functions based on new employee role
 const addEmployeeViewer = () => {
   inquirer
     .prompt(addEmpArr)
@@ -208,11 +215,7 @@ const addEmployeeViewer = () => {
     });
 };
 
-function multiFunction(cb1, cb2) {
-  cb1();
-  cb2();
-}
-
+//function to insert employee into employee table
 const addNewEmployee = (firstName, lastName, roleId) => {
   connection.query(
     `INSERT INTO emp_trackerDB.employee (first_name, last_name, role_id, manager_id) VALUES ( ? , ? , ? , ? )`,
@@ -224,12 +227,7 @@ const addNewEmployee = (firstName, lastName, roleId) => {
   );
 };
 
-const listRoles = () => {};
-
-const listEmployees = () => {
-  connection.query(`SELECT `);
-};
-
+//function to call the update record for employee title
 const updateEmployeeTitleRecord = (empID) => {
   const titleChoiceQuestion = {
     type: "rawlist",
@@ -241,6 +239,7 @@ const updateEmployeeTitleRecord = (empID) => {
   inquirer
     .prompt(titleChoiceQuestion)
     .then((answers) => {
+      //switch to run logic for the update title functions
       switch (answers.employeeTitle) {
         case "Sales Lead": {
           let titleID = 1;
@@ -283,6 +282,7 @@ const updateEmployeeTitleRecord = (empID) => {
     });
 };
 
+//function to update the employee title
 const updatTitleRecord = (id, titleID) => {
   console.log("TITLE ID:  " + titleID);
   console.log("ID:   " + id);
@@ -298,6 +298,7 @@ const updatTitleRecord = (id, titleID) => {
   );
 };
 
+//function to view employees by title
 const viewEmployeesByTitle = () => {
   const empArray = [];
   connection
@@ -305,6 +306,7 @@ const viewEmployeesByTitle = () => {
       `SELECT CONCAT(first_name, ' ', last_name) full_name FROM employee`,
       (err, res) => {
         if (err) throw err;
+        //gets select result and parses to place into inquirer employee choices array
         const result = Object.values(JSON.parse(JSON.stringify(res)));
         result.forEach((val) => empArray.push(val.full_name));
         inquirer
@@ -325,6 +327,7 @@ const viewEmployeesByTitle = () => {
 
               (err, res) => {
                 if (err) throw err;
+                //parses select return to grab employee id
                 const newRes = Object.values(JSON.parse(JSON.stringify(res)));
                 newRes.forEach(({ id }) => {
                   console.log(newRes);
@@ -332,6 +335,7 @@ const viewEmployeesByTitle = () => {
                   console.log(`EMP ID: ${id}`);
                   return empID;
                 });
+                //calls the update title based on employee id
                 updateEmployeeTitleRecord(empID);
               }
             );
@@ -347,6 +351,7 @@ const viewEmployeesByTitle = () => {
     });
 };
 
+//insert statement to update emp_role table
 const addNewTitle = (title, salary, deptId) => {
   connection.query(
     `INSERT INTO emp_trackerDB.emp_role (title, salary, dept_id) VALUES ( ? , ? , ? )`,
@@ -358,6 +363,7 @@ const addNewTitle = (title, salary, deptId) => {
   );
 };
 
+//view by department function
 const viewAllByDept = () => {
   connection
     .query("SELECT * FROM department", (err, res) => {
@@ -400,6 +406,7 @@ const viewAllByDept = () => {
     });
 };
 
+//function to select which employee you want to delete
 const deleteEmployeeViewer = () => {
   const empArray = [];
   connection
@@ -419,14 +426,17 @@ const deleteEmployeeViewer = () => {
             message: "Which employee would you like to delete?",
           })
           .then((answer) => {
+            //parse the answer returned into firstName and lastName to pull all of that employees info
             let wordsArr = answer.empChoice.split(" ");
             let firstName = wordsArr[0];
             let lastName = wordsArr[1];
+            //
             connection.query(
               `SELECT a.id, first_name, last_name, title, salary, dept_name FROM employee a JOIN emp_role b ON a.role_id = b.id JOIN department c ON b.dept_id = c.id WHERE first_name = "${firstName}" AND last_name = "${lastName}"`,
 
               (err, res) => {
                 if (err) throw err;
+                //parses id from select statement and calls delete record function passing id
                 const newRes = Object.values(JSON.parse(JSON.stringify(res)));
                 newRes.forEach(({ id }) => {
                   deleteID = id;
