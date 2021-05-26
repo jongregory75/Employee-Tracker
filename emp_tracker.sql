@@ -59,9 +59,9 @@ USE emp_trackerDB;
 -- INNER JOIN emp_role ON employee.id = emp_role.id
 -- WHERE employee.id = 10;
 
-SELECT id as id, CONCAT(first_name, ' ', last_name) full_name, title, salary, dept_name FROM employee a
-JOIN emp_role b ON a.id = b.id
-JOIN department c ON b.dept_id = c.id -- WHERE first_name = ${firstName} AND last_name = ${lastName}
+-- SELECT id as role_id, CONCAT(first_name, ' ', last_name) full_name, title, salary, dept_name FROM employee a
+-- JOIN emp_role b ON a.role_id = b.id
+-- JOIN department c ON b.dept_id = c.id -- WHERE first_name = ${firstName} AND last_name = ${lastName}
 
 -- SELECT * FROM emp_role;
 -- SELECT role_id, CONCAT(first_name, ' ', last_name) full_name, title, salary, dept_name  FROM employee a
@@ -69,3 +69,8 @@ JOIN department c ON b.dept_id = c.id -- WHERE first_name = ${firstName} AND las
 
 -- JOIN department c ON b.dept_id = c.id WHERE c.dept_name = "Engineering" 
 
+UPDATE title set ? where ?
+
+SELECT a.id, CONCAT(first_name, ' ', last_name) full_name, title, salary, dept_name FROM employee a
+    LEFT JOIN emp_role b ON a.id = b.id 
+     JOIN department c ON b.dept_id = c.id

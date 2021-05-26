@@ -1,0 +1,1 @@
+SELECT * FROM emp_trackerdb.emp_role;

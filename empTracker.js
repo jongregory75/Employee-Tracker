@@ -3,6 +3,7 @@
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 var deleteID;
+var empID;
 
 const { restoreDefaultPrompts } = require("inquirer");
 const mysql = require("mysql");
@@ -47,11 +48,9 @@ const mainMenuQuestion = () => {
   const mainMenuQuestionArr = [
     "View All Employees",
     "View All Employees By Department",
-    "View All Employees By Manager",
     "Add employee",
     "Remove employee",
     "Update employee role",
-    "Update employee dept",
   ];
 
   const mainMenuChoice = [
@@ -74,16 +73,16 @@ const mainMenuQuestion = () => {
           viewAllByDept();
           break;
         }
-        case "View All Employees By Manager": {
-          viewAllByManager();
-          break;
-        }
         case "Add employee": {
-          addEmployee();
+          addEmployeeViewer();
           break;
         }
         case "Remove employee": {
-          deleteEmployee();
+          deleteEmployeeViewer();
+          break;
+        }
+        case "Update employee role": {
+          viewEmployeesByTitle();
           break;
         }
       }
@@ -152,7 +151,7 @@ const addEmpArr = [
   },
 ];
 
-const addEmployee = () => {
+const addEmployeeViewer = () => {
   inquirer
     .prompt(addEmpArr)
     .then((answers) => {
@@ -164,38 +163,38 @@ const addEmployee = () => {
 
       switch (answers.employeeTitle) {
         case "Sales Lead": {
-          updateTitle(title, salary, 1);
-          updateEmployee(firstName, lastName, 1);
+          addNewTitle(title, salary, 1);
+          addNewEmployee(firstName, lastName, 1);
           return mainMenuQuestion();
         }
         case "Salesperson": {
-          updateTitle(title, salary, 1);
-          updateEmployee(firstName, lastName, 2);
+          addNewTitle(title, salary, 1);
+          addNewEmployee(firstName, lastName, 2);
           return mainMenuQuestion();
         }
         case "Lead Engineer": {
-          updateTitle(title, salary, 3);
-          updateEmployee(firstName, lastName, 3);
+          addNewTitle(title, salary, 3);
+          addNewEmployee(firstName, lastName, 3);
           return mainMenuQuestion();
         }
         case "Software Engineer": {
-          updateTitle(title, salary, 3);
-          updateEmployee(firstName, lastName, 4);
+          addNewTitle(title, salary, 3);
+          addNewEmployee(firstName, lastName, 4);
           return mainMenuQuestion();
         }
         case "Accountant": {
-          updateTitle(title, salary, 2);
-          updateEmployee(firstName, lastName, 5);
+          addNewTitle(title, salary, 2);
+          addNewEmployee(firstName, lastName, 5);
           return mainMenuQuestion();
         }
         case "Legal Team Lead": {
-          updateTitle(title, salary, 4);
-          updateEmployee(firstName, lastName, 6);
+          addNewTitle(title, salary, 4);
+          addNewEmployee(firstName, lastName, 6);
           return mainMenuQuestion();
         }
         case "Lawyer": {
-          updateTitle(title, salary, 4);
-          updateEmployee(firstName, lastName, 7);
+          addNewTitle(title, salary, 4);
+          addNewEmployee(firstName, lastName, 7);
           return mainMenuQuestion();
         }
       }
@@ -214,7 +213,7 @@ function multiFunction(cb1, cb2) {
   cb2();
 }
 
-const updateEmployee = (firstName, lastName, roleId) => {
+const addNewEmployee = (firstName, lastName, roleId) => {
   connection.query(
     `INSERT INTO emp_trackerDB.employee (first_name, last_name, role_id, manager_id) VALUES ( ? , ? , ? , ? )`,
     [firstName, lastName, roleId, null],
@@ -225,18 +224,130 @@ const updateEmployee = (firstName, lastName, roleId) => {
   );
 };
 
-const updateDept = (deptName) => {
+const listRoles = () => {};
+
+const listEmployees = () => {
+  connection.query(`SELECT `);
+};
+
+const updateEmployeeTitleRecord = (empID) => {
+  const titleChoiceQuestion = {
+    type: "rawlist",
+    name: "employeeTitle",
+    message: "Enter the new employee title",
+    choices: titleChoiceArr,
+  };
+  let updateEmpID = empID;
+  inquirer
+    .prompt(titleChoiceQuestion)
+    .then((answers) => {
+      switch (answers.employeeTitle) {
+        case "Sales Lead": {
+          let titleID = 1;
+          return updatTitleRecord(updateEmpID, titleID);
+        }
+        case "Salesperson": {
+          let titleID = 2;
+          return updatTitleRecord(updateEmpID, titleID);
+        }
+        case "Lead Engineer": {
+          let titleID = 3;
+          return updatTitleRecord(updateEmpID, titleID);
+        }
+        case "Software Engineer": {
+          let titleID = 4;
+          return updatTitleRecord(updateEmpID, titleID);
+        }
+        case "Accountant": {
+          console.log("ENTER ACCOUNTANT");
+          let titleID = 5;
+          console.log("ID" + titleID);
+          return updatTitleRecord(updateEmpID, titleID);
+        }
+        case "Legal Team Lead": {
+          let titleID = 6;
+          return updatTitleRecord(updateEmpID, titleID);
+        }
+        case "Lawyer": {
+          let titleID = 7;
+          return updatTitleRecord(updateEmpID, titleID);
+        }
+      }
+    })
+    .catch((error) => {
+      if (error.isTtyError) {
+        // Prompt couldn't be rendered in the current environment
+      } else {
+        // Something else went wrong
+      }
+    });
+};
+
+const updatTitleRecord = (id, titleID) => {
+  console.log("TITLE ID:  " + titleID);
+  console.log("ID:   " + id);
   connection.query(
-    `INSERT INTO emp_trackerDB.department (dept_name) SET ?`,
-    { dept_name: deptName },
+    `UPDATE emp_trackerdb.employee SET ? WHERE ?`,
+    [{ role_id: titleID }, { id: id }],
     (err, res) => {
       if (err) throw err;
+      console.log(`${res.affectedRows} employees updated`);
+      mainMenuQuestion();
       connection.end;
     }
   );
 };
 
-const updateTitle = (title, salary, deptId) => {
+const viewEmployeesByTitle = () => {
+  const empArray = [];
+  connection
+    .query(
+      `SELECT CONCAT(first_name, ' ', last_name) full_name FROM employee`,
+      (err, res) => {
+        if (err) throw err;
+        const result = Object.values(JSON.parse(JSON.stringify(res)));
+        result.forEach((val) => empArray.push(val.full_name));
+        inquirer
+          .prompt({
+            name: "empChoice",
+            type: "rawlist",
+            choices: empArray,
+            message: "Which employee would you like to update?",
+          })
+          .then((answer) => {
+            //splits employee First Last into variable for lookup
+            let wordsArr = answer.empChoice.split(" ");
+            let firstName = wordsArr[0];
+            let lastName = wordsArr[1];
+            //retreives employee info
+            connection.query(
+              `SELECT emp_role.id, role_id, first_name, last_name, title, salary, dept_name FROM employee LEFT JOIN emp_role ON employee.role_id = emp_role.id LEFT JOIN department ON emp_role.dept_id = department.id WHERE first_name = "${firstName}" AND last_name = "${lastName}"`,
+
+              (err, res) => {
+                if (err) throw err;
+                const newRes = Object.values(JSON.parse(JSON.stringify(res)));
+                newRes.forEach(({ id }) => {
+                  console.log(newRes);
+                  empID = id;
+                  console.log(`EMP ID: ${id}`);
+                  return empID;
+                });
+                updateEmployeeTitleRecord(empID);
+              }
+            );
+          });
+      }
+    )
+    .catch((error) => {
+      if (error.isTtyError) {
+        // Prompt couldn't be rendered in the current environment
+      } else {
+        // Something else went wrong
+      }
+    });
+};
+
+const addNewTitle = (title, salary, deptId) => {
   connection.query(
     `INSERT INTO emp_trackerDB.emp_role (title, salary, dept_id) VALUES ( ? , ? , ? )`,
     [title, salary, deptId],
@@ -289,9 +400,8 @@ const viewAllByDept = () => {
     });
 };
 
-const deleteEmployee = () => {
+const deleteEmployeeViewer = () => {
   const empArray = [];
-
   connection
     .query(
       `SELECT a.id, role_id, CONCAT(first_name, ' ', last_name) full_name, title, salary, dept_name FROM employee a
@@ -322,7 +432,7 @@ const deleteEmployee = () => {
                   deleteID = id;
                   return deleteID;
                 });
-                deleteRecord(deleteID);
+                deleteEmployeeRecord(deleteID);
               }
             );
           });
@@ -337,13 +447,14 @@ const deleteEmployee = () => {
     });
 };
 
-const deleteRecord = (deleteID) => {
+// Deletes the actual record, created top level function to deal with nested async issues
+const deleteEmployeeRecord = (deleteID) => {
   let empId = deleteID;
   connection.query(
     `DELETE employee, emp_role FROM employee INNER JOIN emp_role ON employee.id = emp_role.id WHERE employee.id = ${empId}`,
     (err, res) => {
       if (err) throw err;
-      console.log(`${res.affectedRows} employees deleted!\n`);
+
       // Call readProducts AFTER the DELETE completes
       mainMenuQuestion();
     }
